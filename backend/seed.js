@@ -138,7 +138,7 @@ const sampleRestaurants = [
     rating: 4.2,
     deliveryTime: "25-35 min",
     costForTwo: 550,
-    imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800",
+    imageUrl: "https://images.unsplash.com/photo-1563243577-9b53b885e86f?w=800",
     address: "321 Spice Road, Hyderabad",
     menu: [
       {
@@ -181,7 +181,7 @@ const sampleRestaurants = [
     rating: 4.6,
     deliveryTime: "20-30 min",
     costForTwo: 400,
-    imageUrl: "https://images.unsplash.com/photo-1589302168068-9640c0c434b0?w=800",
+    imageUrl: "https://images.unsplash.com/photo-1621510182287-b217b08d8f84?w=800",
     address: "654 Temple Street, Chennai",
     menu: [
       {

@@ -161,3 +161,49 @@
   font-size: 1.2rem;
   color: #666;
 }
+
+.error {
+  text-align: center;
+  padding: 4rem;
+  background: #ffebee;
+  border-radius: 0.5rem;
+  margin: 2rem;
+}
+
+.error h3 {
+  color: #c62828;
+  margin-bottom: 1rem;
+}
+
+.error p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.error button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.error button:hover {
+  background: #ff5252;
+}
+
+.no-restaurants {
+  text-align: center;
+  padding: 4rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  border: 2px dashed #dee2e6;
+}
+
+.no-restaurants p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}

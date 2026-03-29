@@ -24,7 +24,7 @@ const RestaurantMenu: React.FC = () => {
     queryKey: ['restaurant', id],
     queryFn: async () => {
       if (!id) throw new Error('Restaurant ID is required');
-      const response = await fetch(`http://localhost:5000/api/restaurants/${id}`);
+      const response = await fetch(`http://localhost:5000/api/restaurants/${id}`)
       if (!response.ok) throw new Error('Failed to fetch restaurant');
       return response.json();
     },

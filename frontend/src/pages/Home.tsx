@@ -25,9 +25,22 @@ const Home: React.FC = () => {
   const { data: restaurants = [], isLoading, error } = useQuery({
     queryKey: ['restaurants'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:5000/api/restaurants');
-      if (!response.ok) throw new Error('Failed to fetch restaurants');
-      return response.json();
+      try {
+        console.log('Fetching restaurants from: http://localhost:5000/api/restaurants');
+        const response = await fetch("http://localhost:5000/api/restaurants");
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch restaurants: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Restaurants fetched:', data.length, 'restaurants');
+        return data;
+      } catch (err) {
+        console.error('Error fetching restaurants:', err);
+        throw err;
+      }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -65,7 +78,14 @@ const Home: React.FC = () => {
   }
 
   if (error) {
-    return <div className="error">Error loading restaurants</div>;
+    console.error('Query error:', error);
+    return (
+      <div className="error">
+        <h3>Error loading restaurants</h3>
+        <p>{error instanceof Error ? error.message : 'Unknown error occurred'}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
   }
 
   return (
@@ -102,12 +122,18 @@ const Home: React.FC = () => {
       </div>
 
       <div className="restaurants-container">
-        <h2>Restaurants</h2>
-        <div className="restaurants-grid">
-          {filteredRestaurants.map((restaurant: Restaurant) => (
-            <RestaurantCard key={restaurant._id} restaurant={restaurant} />
-          ))}
-        </div>
+        <h2>Restaurants ({filteredRestaurants.length} found)</h2>
+        {restaurants.length === 0 ? (
+          <div className="no-restaurants">
+            <p>No restaurants available. Please check if the backend server is running.</p>
+          </div>
+        ) : (
+          <div className="restaurants-grid">
+            {filteredRestaurants.map((restaurant: Restaurant) => (
+              <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
