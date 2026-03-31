@@ -26,8 +26,12 @@ const Home: React.FC = () => {
     queryKey: ['restaurants'],
     queryFn: async () => {
       try {
-        console.log('Fetching restaurants from: http://localhost:5000/api/restaurants');
-        const response = await fetch("http://localhost:5000/api/restaurants");
+        const apiUrl = process.env.NODE_ENV === 'production' 
+          ? 'https://swiggybooking.onrender.com/api/restaurants'
+          : 'http://localhost:5000/api/restaurants';
+        
+        console.log('Fetching restaurants from:', apiUrl);
+        const response = await fetch(apiUrl);
         console.log('Response status:', response.status);
         
         if (!response.ok) {
