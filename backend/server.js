@@ -9,7 +9,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://swiggybooking.vercel.app',
+    'https://swiggybooking.onrender.com'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Database connection

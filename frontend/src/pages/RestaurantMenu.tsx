@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LazyImage from '../components/LazyImage';
 import { useCart } from '../context/CartContext';
+import { API_ENDPOINTS, apiFetch } from '../api';
 import './RestaurantMenu.css';
 
 interface MenuItem {
@@ -25,13 +26,10 @@ const RestaurantMenu: React.FC = () => {
     queryFn: async () => {
       if (!id) throw new Error('Restaurant ID is required');
       
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? `https://swiggybooking.onrender.com/api/restaurants/${id}`
-        : `http://localhost:5000/api/restaurants/${id}`;
-      
-      const response = await fetch(apiUrl);
-      if (!response.ok) throw new Error('Failed to fetch restaurant');
-      return response.json();
+      console.log('Fetching restaurant from:', API_ENDPOINTS.RESTAURANT_BY_ID(id));
+      const data = await apiFetch(API_ENDPOINTS.RESTAURANT_BY_ID(id));
+      console.log('Restaurant fetched:', data.name);
+      return data;
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 minutes

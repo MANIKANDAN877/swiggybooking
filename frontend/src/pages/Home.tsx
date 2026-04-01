@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import LazyImage from '../components/LazyImage';
 import { useDebounce } from '../hooks/useDebounce';
+import { API_ENDPOINTS, apiFetch } from '../api';
 import './Home.css';
 
 interface Restaurant {
@@ -26,19 +27,8 @@ const Home: React.FC = () => {
     queryKey: ['restaurants'],
     queryFn: async () => {
       try {
-        const apiUrl = process.env.NODE_ENV === 'production' 
-          ? 'https://swiggybooking.onrender.com/api/restaurants'
-          : 'http://localhost:5000/api/restaurants';
-        
-        console.log('Fetching restaurants from:', apiUrl);
-        const response = await fetch(apiUrl);
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-          throw new Error(`Failed to fetch restaurants: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
+        console.log('Fetching restaurants from:', API_ENDPOINTS.RESTAURANTS);
+        const data = await apiFetch(API_ENDPOINTS.RESTAURANTS);
         console.log('Restaurants fetched:', data.length, 'restaurants');
         return data;
       } catch (err) {
