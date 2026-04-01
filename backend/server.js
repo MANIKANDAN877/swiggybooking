@@ -15,7 +15,9 @@ app.use(cors({
     'https://swiggybooking.vercel.app',
     'https://swiggybooking.onrender.com'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
