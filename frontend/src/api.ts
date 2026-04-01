@@ -11,7 +11,7 @@ export const API_ENDPOINTS = {
 };
 
 // API helper function
-export const apiFetch = async (url: string, options?: RequestInit, retries = 3) => {
+export const apiFetch = async (url: string, options?: RequestInit, retries = 3): Promise<any> => {
   try {
     const response = await fetch(url, {
       ...options,
