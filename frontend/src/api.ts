@@ -11,12 +11,13 @@ export const API_ENDPOINTS = {
 };
 
 // API helper function
-export const apiFetch = async (url: string, options?: RequestInit) => {
+export const apiFetch = async (url: string, options?: RequestInit, retries = 3) => {
   try {
     const response = await fetch(url, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
         ...options?.headers,
       },
     });
@@ -28,6 +29,14 @@ export const apiFetch = async (url: string, options?: RequestInit) => {
     return await response.json();
   } catch (error) {
     console.error('API fetch error:', error);
+    
+    // Retry logic
+    if (retries > 0 && error instanceof Error && error.message.includes('CORS')) {
+      console.log(`Retrying API call... (${4 - retries}/3)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return apiFetch(url, options, retries - 1);
+    }
+    
     throw error;
   }
 };
