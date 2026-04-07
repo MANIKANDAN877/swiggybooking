@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import LazyImage from '../components/LazyImage';
 import { useDebounce } from '../hooks/useDebounce';
 import { API_ENDPOINTS, apiFetch } from '../api';
+import { FALLBACK_RESTAURANTS } from '../fallbackData';
 import './Home.css';
 
 interface Restaurant {
@@ -32,11 +33,14 @@ const Home: React.FC = () => {
         console.log('Restaurants fetched:', data.length, 'restaurants');
         return data;
       } catch (err) {
-        console.error('Error fetching restaurants:', err);
-        throw err;
+        console.error('Error fetching restaurants, using fallback data:', err);
+        // Return fallback data when API fails
+        return FALLBACK_RESTAURANTS;
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const cuisines = useMemo(() => ['All', 'North Indian', 'South Indian', 'Chinese', 'Italian', 'Mexican', 'Biryani', 'Fast Food'], []);

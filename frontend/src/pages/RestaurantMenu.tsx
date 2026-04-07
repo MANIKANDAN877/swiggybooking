@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import LazyImage from '../components/LazyImage';
 import { useCart } from '../context/CartContext';
 import { API_ENDPOINTS, apiFetch } from '../api';
+import { FALLBACK_RESTAURANTS } from '../fallbackData';
 import './RestaurantMenu.css';
 
 interface MenuItem {
@@ -26,13 +27,26 @@ const RestaurantMenu: React.FC = () => {
     queryFn: async () => {
       if (!id) throw new Error('Restaurant ID is required');
       
-      console.log('Fetching restaurant from:', API_ENDPOINTS.RESTAURANT_BY_ID(id));
-      const data = await apiFetch(API_ENDPOINTS.RESTAURANT_BY_ID(id));
-      console.log('Restaurant fetched:', data.name);
-      return data;
+      try {
+        console.log('Fetching restaurant from:', API_ENDPOINTS.RESTAURANT_BY_ID(id));
+        const data = await apiFetch(API_ENDPOINTS.RESTAURANT_BY_ID(id));
+        console.log('Restaurant fetched:', data.name);
+        return data;
+      } catch (err) {
+        console.error('Error fetching restaurant, using fallback data:', err);
+        // Return fallback restaurant data
+        const fallbackRestaurant = FALLBACK_RESTAURANTS.find(r => r._id === id);
+        if (fallbackRestaurant) {
+          return fallbackRestaurant;
+        }
+        // If no matching fallback, return first fallback restaurant
+        return FALLBACK_RESTAURANTS[0];
+      }
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const categories = useMemo(() => {
